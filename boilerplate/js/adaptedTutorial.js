@@ -33,7 +33,7 @@ function onEachFeature(feature, layer) {
 //function to retrieve the data and place it on the map
 function getData(){
     //load the data
-    fetch("data/ImportData.geojson")
+    fetch("data/MegaCities.geojson")
         .then(function(response){
             return response.json();
         })

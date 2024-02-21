@@ -1,1 +1,8 @@
-/*Add CSS styles here*/
+/*Style sheet by Ashmita, 2024*/
+body{
+    margin:0;
+}
+#mapid{
+    height:500px;
+    width:1000px;
+}
