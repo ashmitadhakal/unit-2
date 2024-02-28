@@ -4,5 +4,36 @@ body{
 }
 #mapid{
     height:500px;
-    width:1000px;
+    width:800px;
+    display: inline-block;
+}
+#panel{
+    width: 18%;
+    padding:20px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    height: auto;
+}
+.range-slider {  
+    width: 55%;  
+}  
+
+.step {  
+    width: 20%;  
+}  
+
+.step img {  
+    width: 100%;  
+}  
+
+#forward {
+    float: right;
+}
+    
+#reverse {  
+    float: left;  
+}
+.leaflet-popup-content p {
+    margin: 0.2em 0;
 }
