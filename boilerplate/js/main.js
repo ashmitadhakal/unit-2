@@ -22,29 +22,31 @@ function createMap(){
         center: [20, 0],
         zoom: 2
     });
-}
-    //add OSM base tilelayer
-    var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
-	minZoom: 0,
-	maxZoom: 20,
-	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	ext: 'png'}).addTo(map);
+
+      //add OSM base tilelayer
+      var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
+        minZoom: 0,
+        maxZoom: 20,
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        ext: 'png'}).addTo(map);
     var OpenStreetMap_Mapnik = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-})
-    var OpenStreetMap_DE = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
-	maxZoom: 18,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    })
+        var OpenStreetMap_DE = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    
+    var basemaps= {
+        "Open Street map mapnik": OpenStreetMap_Mapnik,
+        "Open Street map DE": OpenStreetMap_DE
+    }
+    
+    let layerControl = L.control.layers(basemaps).addTo(map);
+    getData(map);
+};
 
-var basemaps= {
-    "Open Street map mapnik": OpenStreetMap_Mapnik,
-    "Open Street map DE": OpenStreetMap_DE
-}
-
-let layerControl=L.control.layers(basemaps).addTo(map);
-getData(map);
 //Import GeoJSON data
 //function to retrieve the data and place it on the map
 function getData(){
@@ -99,7 +101,7 @@ function pointToLayer(feature, latlng, attributes){
     //return the circle marker to the L.geoJson pointToLayer option
     return layer;
 };
-//3: Add circle markers for point features to the map
+//Step 3: Add circle markers for point features to the map
 function createPropSymbols(data, attributes){
     //create leaflet GeoJSON layer and add it to map
     L.geoJson(data, {
@@ -131,31 +133,31 @@ function createSequenceControls(attributes){
             //add skip buttons
             container.insertAdjacentHTML('beforeend','<button class="step" id="reverse" title="Reverse"><img src="img/left.png"></button>');
             container.insertAdjacentHTML('beforeend','<button class="step" id="forward" title="Forward"><img src="img/right.png"></button>');
-            //click listener for buttons
+            //Step 5: click listener for buttons
             container.querySelectorAll('.step').forEach(function(step){
                 step.addEventListener("click", function(){
                     var index = document.querySelector('.range-slider').value;
 
-                    //increment or decrement depending on button clicked
+                    //Step 6: increment or decrement depending on button clicked
                     if (step.id == 'forward'){
                         index++;
-                        //if past the last attribute, wrap around to first attribute
+                        //Step 7: if past the last attribute, wrap around to first attribute
                         index = index > 6 ? 0 : index;
                     } else if (step.id == 'reverse'){
                         index--;
-                        //if past the first attribute, wrap around to last attribute
+                        //Step 7: if past the first attribute, wrap around to last attribute
                         index = index < 0 ? 6 : index;
                         };
 
-                        //Supdate slider
+                        //Step 8: update slider
                         container.querySelector('.range-slider').value = index;
                         //console.log(index);
                         updatePropSymbols(attributes[index]);
                     })
                 })
-            //input listener for slider
+            //Step 5: input listener for slider
             container.querySelector('.range-slider').addEventListener('input', function(){            
-                //get the new index value
+                //Step 6: get the new index value
                 var index = this.value;
                 updatePropSymbols(attributes[index]);
                 //console.log(index)
@@ -322,4 +324,4 @@ function processData(data){
     return attributes;
 };
 
-document.addEventListener('DOMContentLoaded',createMap);
+document.addEventListener('DOMContentLoaded',createMap)
