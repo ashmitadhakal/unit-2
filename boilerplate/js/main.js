@@ -14,7 +14,7 @@ function PopupContent(properties, attribute){
     //"<p><b>Import value in " + attribute + ":</b> " + props[attribute] + " million USD</p>";
     this.formatted = "<p><b>Country:</b> " + properties.Country_Name + "<p><b>Import value in " + attribute + ":</b> " + properties[attribute] + " million USD</p>";
 };
-//Step 1. Create the Leaflet map--already done in createMap()
+//1. Create the Leaflet map--already done in createMap()
 //function to instantiate the Leaflet map
 function createMap(){
     //create the map
@@ -24,14 +24,19 @@ function createMap(){
     });
 
     //add OSM base tilelayer
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-    }).addTo(map);
+    var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 0,
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
+});
+Stadia_OSMBright.addTo(map);
 
     //call getData function
     getData(map);
 };
 
+//Import GeoJSON data
 //function to retrieve the data and place it on the map
 function getData(){
     //load the data
@@ -51,16 +56,6 @@ function getData(){
         })  
 };
 
-
-
-//calculate the radius of each proportional symbol
-function calcPropRadius(attValue) {
-    //constant factor adjusts symbol sizes evenly
-    var minRadius = 0.5;
-    //Flannery Appearance Compensation formula
-    var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.5715) * minRadius
-    return radius;
-};
 //function to convert markers to circle markers
 function pointToLayer(feature, latlng, attributes){
     //Determine which attribute to visualize with proportional symbols
@@ -95,7 +90,7 @@ function pointToLayer(feature, latlng, attributes){
     //return the circle marker to the L.geoJson pointToLayer option
     return layer;
 };
-//Step 3: Add circle markers for point features to the map
+//3: Add circle markers for point features to the map
 function createPropSymbols(data, attributes){
     //create leaflet GeoJSON layer and add it to map
     L.geoJson(data, {
@@ -127,31 +122,31 @@ function createSequenceControls(attributes){
             //add skip buttons
             container.insertAdjacentHTML('beforeend','<button class="step" id="reverse" title="Reverse"><img src="img/left.png"></button>');
             container.insertAdjacentHTML('beforeend','<button class="step" id="forward" title="Forward"><img src="img/right.png"></button>');
-            //Step 5: click listener for buttons
+            //click listener for buttons
             container.querySelectorAll('.step').forEach(function(step){
                 step.addEventListener("click", function(){
                     var index = document.querySelector('.range-slider').value;
 
-                    //Step 6: increment or decrement depending on button clicked
+                    //increment or decrement depending on button clicked
                     if (step.id == 'forward'){
                         index++;
-                        //Step 7: if past the last attribute, wrap around to first attribute
+                        //if past the last attribute, wrap around to first attribute
                         index = index > 6 ? 0 : index;
                     } else if (step.id == 'reverse'){
                         index--;
-                        //Step 7: if past the first attribute, wrap around to last attribute
+                        //if past the first attribute, wrap around to last attribute
                         index = index < 0 ? 6 : index;
                         };
 
-                        //Step 8: update slider
+                        //Supdate slider
                         container.querySelector('.range-slider').value = index;
                         //console.log(index);
                         updatePropSymbols(attributes[index]);
                     })
                 })
-            //Step 5: input listener for slider
+            //input listener for slider
             container.querySelector('.range-slider').addEventListener('input', function(){            
-                //Step 6: get the new index value
+                //get the new index value
                 var index = this.value;
                 updatePropSymbols(attributes[index]);
                 //console.log(index)
@@ -165,7 +160,7 @@ function createSequenceControls(attributes){
 };
 
 
-//Step 10: Resize proportional symbols according to new attribute values
+//Resize proportional symbols according to new attribute values
 function updatePropSymbols(attribute){
     map.eachLayer(function(layer){
         if (layer.feature && layer.feature.properties[attribute]){
@@ -203,15 +198,15 @@ function createLegend(attributes){
             // create the control container with a particular class name
             var container = L.DomUtil.create('div', 'legend-control-container');
             container.innerHTML = '<h3 class="temporalLegend">Import value in <span class="year">1995</span></h3>';
-            //Step 1: start attribute legend svg string
+            //1: start attribute legend svg string
             var svg = '<svg id="attribute-legend" width="220px" height="200px">';
 
              //array of circle names to base loop on
             var circles = ["max", "mean", "min"];
 
-            //Step 2: loop to add each circle and text to svg string
+            //2: loop to add each circle and text to svg string
             for (var i=0; i<circles.length; i++){
-                //Step 3: assign the r and cy attributes            
+                //3: assign the r and cy attributes            
                 var radius = calcPropRadius(dataStats[circles[i]]);           
                 var cy = 113 - radius;            
 
@@ -262,6 +257,14 @@ function  updateLegend(attribute){
 		document.querySelector("#" + key + "-text").textContent = Math.round(circleValues[key] * 100) / 100 + " million($)";
 	}
 }
+//calculate the radius of each proportional symbol
+function calcPropRadius(attValue) {
+    //constant factor adjusts symbol sizes evenly
+    var minRadius = 0.5;
+    //Flannery Appearance Compensation formula
+    var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.5715) * minRadius
+    return radius;
+};
 //Function to calculate minimum value of arrar for Flannery scaling
 function calcStats(data){
     //create empty array to store all values
@@ -309,7 +312,5 @@ function processData(data){
 
     return attributes;
 };
-//Step 2. Import GeoJSON data--already done in getData()
-
 
 document.addEventListener('DOMContentLoaded',createMap)
