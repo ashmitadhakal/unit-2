@@ -22,20 +22,29 @@ function createMap(){
         center: [20, 0],
         zoom: 2
     });
-
+}
     //add OSM base tilelayer
     var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
 	minZoom: 0,
 	maxZoom: 20,
 	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	ext: 'png'
+	ext: 'png'}).addTo(map);
+    var OpenStreetMap_Mapnik = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+})
+    var OpenStreetMap_DE = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+	maxZoom: 18,
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
-Stadia_OSMBright.addTo(map);
 
-    //call getData function
-    getData(map);
-};
+var basemaps= {
+    "Open Street map mapnik": OpenStreetMap_Mapnik,
+    "Open Street map DE": OpenStreetMap_DE
+}
 
+let layerControl=L.control.layers(basemaps).addTo(map);
+getData(map);
 //Import GeoJSON data
 //function to retrieve the data and place it on the map
 function getData(){
@@ -313,4 +322,4 @@ function processData(data){
     return attributes;
 };
 
-document.addEventListener('DOMContentLoaded',createMap)
+document.addEventListener('DOMContentLoaded',createMap);
