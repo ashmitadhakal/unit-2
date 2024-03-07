@@ -3,14 +3,33 @@ body{
     margin:0;
 }
 #mapid{
-    height:550px;
-    width:990px;
+    height:600px;
+    width:1100px;
     display: inline-block;
+}
+#panel {    
+    width: 16%;    
+    padding: 4px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 22px;
+    background-color: rgba(245, 241, 241,0.8);
+
+}
+#mapTitle{
+    width: 1080px;  
+    height: 30px;  
+    background-color: rgba(245, 241, 241,0.8);  
+    padding: 10px;  
+    text-align: center;
+    font-size:x-large;
+
 }
 .sequence-control-container {  
     width: 350px;  
     height: 30px;  
-    background-color: rgba(255,255,255,0.8);  
+    background-color: rgba(245, 241, 241,0.8);  
     padding: 10px;  
     line-height: 45px;  
     text-align: center;  
@@ -19,7 +38,7 @@ body{
 .legend-control-container{
     width: 230px;  
     height: 160px;  
-    background-color: rgba(255,255,255,0.8);  
+    background-color: rgba(245, 241, 241, 0.8);  
     padding: 2px;  
     line-height: 10px;  
     text-align: center;  

@@ -1,4 +1,5 @@
-/* Map of GeoJSON data from MegaCities.geojson */
+/*Author: Ashmita, 2024 */
+/* Map of GeoJSON data from ImportData.geojson */
 //declare map var in global scope
 var map;
 var dataStats = {};  
@@ -22,27 +23,28 @@ function createMap(){
         center: [20, 0],
         zoom: 2
     });
-
-      //add OSM base tilelayer
-      var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
-        minZoom: 0,
-        maxZoom: 20,
-        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        ext: 'png'}).addTo(map);
-    var OpenStreetMap_Mapnik = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    })
-        var OpenStreetMap_DE = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    var container = L.DomUtil.create('div', 'legend-control-container');
+    container.innerHTML = '<h3 class="temporalLegend">Import value in <span class="year">1995</span></h3>';
+    
+    //add OSM base tilelayer
+    var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
+         minZoom: 0,
+         maxZoom: 20,
+            attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            ext: 'png'
     });
+    var Esri_WorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+	        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+    }).addTo(map);
+    var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+	        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+        });
     
     var basemaps= {
-        "Open Street map mapnik": OpenStreetMap_Mapnik,
-        "Open Street map DE": OpenStreetMap_DE
+        "Stadia OSM": Stadia_OSMBright,
+        "ESRI World Street Map": Esri_WorldStreetMap,
+        "ESRI World Topo Map": Esri_WorldTopoMap
     }
-    
     let layerControl = L.control.layers(basemaps).addTo(map);
     getData(map);
 };
@@ -60,7 +62,7 @@ function getData(){
             var attributes=processData(json);
             //calculate minimum value
             calcStats(json);
-            //call function to create proportional symbols
+            //call function to create proportional symbols sequence control and legend
             createPropSymbols(json,attributes);
             createSequenceControls(attributes);
             createLegend(attributes);
@@ -198,7 +200,6 @@ function updatePropSymbols(attribute){
 };
 
 
-
 function createLegend(attributes){
     var LegendControl = L.Control.extend({
         options: {
@@ -276,6 +277,7 @@ function calcPropRadius(attValue) {
     var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.5715) * minRadius
     return radius;
 };
+
 //Function to calculate minimum value of arrar for Flannery scaling
 function calcStats(data){
     //create empty array to store all values
@@ -317,11 +319,18 @@ function processData(data){
             attributes.push(parseInt(attribute));
         }
     }
-
     //check result
     //console.log(attributes);
 
     return attributes;
 };
+//document.querySelector("#panel").insertAdjacentHTML('beforeend', '<p>This is some text added to the panel.</p>');
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector("#panel").insertAdjacentHTML('beforeend', '<p>This map is created as lab assignment (lab 1) for <b>Interactive Cartography and Geovisualization (GEOG 575)</b> course</p>');
+    document.querySelector("#panel").insertAdjacentHTML('beforeend', '<p>I have created a proportional symbol map with different operators such as : overlay, sequence, zoom, and pan.</p>');
+    document.querySelector("#panel").insertAdjacentHTML('beforeend', '<p><b>About this Map: </b>The map displays the import values for several countries between 1995 to 2022 and the data source is UN COMTRADE</p>');
+    document.querySelector("#panel").insertAdjacentHTML('beforeend', '<h4>By: Ashmita Dhakal</h4>');
 
+
+});
 document.addEventListener('DOMContentLoaded',createMap)
