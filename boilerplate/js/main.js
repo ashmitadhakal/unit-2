@@ -324,7 +324,6 @@ function processData(data){
 
     return attributes;
 };
-//document.querySelector("#panel").insertAdjacentHTML('beforeend', '<p>This is some text added to the panel.</p>');
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector("#panel").insertAdjacentHTML('beforeend', '<p>This map is created as lab assignment (lab 1) for <b>Interactive Cartography and Geovisualization (GEOG 575)</b> course</p>');
     document.querySelector("#panel").insertAdjacentHTML('beforeend', '<p>I have created a proportional symbol map with different operators such as : overlay, sequence, zoom, and pan.</p>');
