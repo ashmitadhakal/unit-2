@@ -1,5 +1,10 @@
 ### **Title:** *Total Import Value of Different COuntries Over the Years*
 ### **Author:** Ashmita Dhakal
+
+### **Dependencies:**
+* [JQuery 3.6.0](https://jquery.com/)
+* [Leaflet 1.6](https://leafletjs.com/reference-1.6.0.html)
+
 ### **Code Version:** 
 Last Updated: 13 March, 2024
 
